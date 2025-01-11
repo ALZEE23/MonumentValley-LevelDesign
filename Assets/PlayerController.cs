@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
 
         // CLICK ON CUBE
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && isActive)
         {
             Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition); RaycastHit mouseHit;
 
@@ -100,10 +100,10 @@ public class PlayerController : MonoBehaviour
         Transform current = nextCubes.First();
         nextCubes.Remove(current);
 
-        // if (current == clickedCube)
-        // {
-        //     return;
-        // }
+        if (current == clickedCube)
+        {
+            return;
+        }
 
         foreach (WalkPath path in current.GetComponent<Walkable>().possiblePaths)
         {
@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviour
         }
 
         finalPath.Insert(0, clickedCube);
-
+        
         FollowPath();
     }
 
@@ -145,18 +145,17 @@ public class PlayerController : MonoBehaviour
 
         walking = true;
 
-        if (isActive)
+
+        for (int i = finalPath.Count - 1; i > 0; i--)
         {
-            for (int i = finalPath.Count - 1; i > 0; i--)
-            {
-                float time = finalPath[i].GetComponent<Walkable>().isStair ? 1.5f : 1;
+            float time = finalPath[i].GetComponent<Walkable>().isStair ? 1.5f : 1;
 
-                s.Append(transform.DOMove(finalPath[i].GetComponent<Walkable>().GetWalkPoint(), .2f * time).SetEase(Ease.Linear));
+            s.Append(transform.DOMove(finalPath[i].GetComponent<Walkable>().GetWalkPoint(), .2f * time).SetEase(Ease.Linear));
 
-                if (!finalPath[i].GetComponent<Walkable>().dontRotate)
-                    s.Join(transform.DOLookAt(finalPath[i].position, .1f, AxisConstraint.Y, Vector3.up));
-            }
+            if (!finalPath[i].GetComponent<Walkable>().dontRotate)
+                s.Join(transform.DOLookAt(finalPath[i].position, .1f, AxisConstraint.Y, Vector3.up));
         }
+
 
         if (clickedCube.GetComponent<Walkable>().isButton)
         {
