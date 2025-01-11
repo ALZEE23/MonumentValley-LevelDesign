@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public PlayerController player;
+    public List<PlayerSwitch> players;
     public List<PathCondition> pathConditions = new List<PathCondition>();
     public List<Transform> pivots;
 
@@ -83,4 +84,11 @@ public class SinglePath
 {
     public Walkable block;
     public int index;
+}
+
+[System.Serializable]
+public class PlayerSwitch
+{
+    public Transform player;
+    public bool active;
 }
