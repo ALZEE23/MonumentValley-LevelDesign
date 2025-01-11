@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public PlayerController player;
-    public List<PlayerSwitch> players;
+    public List<PlayerController> playerControllers = new List<PlayerController>();
     public List<PathCondition> pathConditions = new List<PathCondition>();
     public List<Transform> pivots;
 
@@ -56,6 +56,20 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
         }
 
+    }
+    public void CheckButtonPress(PlayerController activePlayer)
+    {
+        foreach (PlayerController pc in playerControllers)
+        {
+            if (pc == activePlayer)
+            {
+                pc.isActive = false;
+            }
+            else
+            {
+                pc.isActive = true;
+            }
+        }
     }
 
     public void RotateRightPivot()
